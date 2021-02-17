@@ -1,24 +1,25 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
+import PokemonNotFound from './PokemonNotFound';
+import './PokemonDetails.css'
+import Pokemon from './Pokemon';
 
 class PokemonDetails extends React.Component {
   render() {
     const { match: { params: { namePoke } } } = this.props;
     const { pokemons } = this.props;
     const pokemon = pokemons.find(pokemon => pokemon.name === namePoke);
-    const { name, type, averageWeight, image, summary, foundAt } = pokemon;
+    const { name, summary, foundAt } = pokemon;
+
+    if(!pokemons.find(pokemon => pokemon.name === namePoke)) {
+      return (
+        <Redirect to={ PokemonNotFound }/>
+      );
+    }
     return(
       <div className="pokemon-details">
         <h2>{`${name} Details`}</h2>
-        <div className="pokemon">
-          <div>
-            <p>{name}</p>
-            <p>{type}</p>
-            <p>
-              Average weight: {`${averageWeight.value} ${averageWeight.measurementUnit}`}
-            </p>
-          </div>
-          <img src={image} alt={`${name} sprite`} />
-        </div>
+        <Pokemon pokemon={ pokemon }/>
         <h2>Summary</h2>
         <p>{summary}</p>
         <h2>{`Game Location of ${name}`}</h2>
